@@ -6,19 +6,28 @@
   "dependencies": {
     "smi.cli": "0.x"
   },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "request": "^2.40.0",
+    "pio": "^0.6"
+  },
   "scripts": {
-    "install": "./node_modules/.bin/smi install"
+    "install": "./node_modules/.bin/smi install",
+    "test": "./node_modules/.bin/mocha --reporter list test/*.js"
   },
   "upstream": {
     "packages": {
       "top": [
+        "../*",
+        "../0-pio/*",
         "../../*",
         "../../../../*"
       ]
     }
   },
   "mappings": {
-    "io.pinf.server.www": "top/io.pinf.server.www"
+    "io.pinf.server.www": "top/io.pinf.server.www",
+    "pio.dns": "top/pio.dns"
   },
   "config": {
     "smi.cli": {
