@@ -33,22 +33,25 @@ require("io.pinf.server.www").for(module, __dirname, function(app, config, HELPE
 				return next(new Error("No 'adapters' configured for profile '" + req.body.profile + "'!"));
 			}
 
+			var records = req.body.records;
+
+			console.log("profiles", JSON.stringify(profiles, null, 4));
+			console.log("records", JSON.stringify(records, null, 4));
+
 			var allow = 0;
-			req.body.records.forEach(function (record) {
+			records.forEach(function (record) {
 				var matched = profiles[req.body.profile].allow.filter(function (rule) {
 					return ((new RegExp(rule)).exec(record.name.replace(/\*/g, "")) !== null);
 				});
 				if (matched.length > 0) {
 					allow += 1;
 				} else {
-					console.log("Warning: Record '" + record + "' did not match any rules for profile '" + req.body.profile + "'!");
+					console.log("Warning: Record '" + record.name + "' did not match any rules for profile '" + req.body.profile + "'!");
 				}
 			});
-			if (allow !== req.body.records.length) {
-				return next(new Error("Profile '" + req.body.profile + "' does now allow all requested records:", JSON.stringify(records, null, 4)));
+			if (allow !== records.length) {
+				return next(new Error("Profile '" + req.body.profile + "' does now allow all requested records: " + JSON.stringify(records, null, 4)));
 			}
-
-			var records = req.body.records;
 
 			var waitfor = HELPERS.API.WAITFOR.serial(function (err) {
 				if (err) return next(err);
